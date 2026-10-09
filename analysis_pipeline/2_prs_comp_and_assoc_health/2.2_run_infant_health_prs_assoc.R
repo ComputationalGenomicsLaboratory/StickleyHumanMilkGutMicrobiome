@@ -42,7 +42,7 @@ res_glm_infant_health_prs=run_glm_function(outcome_list = infant_health, env_lis
                                            adjust_terms = NULL, adjust_var = 'Covariates',
                                            save_all_output=FALSE)
 #head(res_glm_infant_health_prs)
-dim(res_glm_infant_health_prs)     #168   8
+dim(res_glm_infant_health_prs)
 
 #Save
 write.csv(res_glm_infant_health_prs, 'StickleyHumanMilkGutMicrobiome/analysis_pipeline/2_prs_comp_and_assoc_health/res_prs_health.csv', row.names = FALSE)
