@@ -18,6 +18,8 @@ source('StickleyHumanMilkGutMicrobiome/helper_functions/glm_functions/run_glm_fu
 #Read dataframe (dataframe with subject IDs, infant health outcomes, PRSs, and other covariates)
 #Note: binary variables in dataframe are already factored
 #data_infant_health_prs=readRDS('ADD_PATH_TO_DATA')
+head(data_infant_health_prs)
+dim(data_infant_health_prs)
 
 ###############################################################################################
 #Get function arguments for GLM (ones that are long)
