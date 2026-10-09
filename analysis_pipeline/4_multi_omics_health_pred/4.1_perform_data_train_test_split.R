@@ -1,7 +1,7 @@
 #Name: Sara Stickley
 #Title: Perform training/testing split of data
-#Description: Perform training/testing split of data by each health outcome. A 70/30 train/test set split was used, 
-#             with no validation set since cross-validation will be performed. 
+#Description: Perform training/testing split of data. A 70/30 train/test set split was used, with no validation set 
+#             since cross-validation will be performed. 
 
 ###############################################################################################
 rm(list=ls())       #Remove all objects from current workspace (R memory)
@@ -22,12 +22,8 @@ head(data_multi_omics)
 dim(data_multi_omics)
 
 ###############################################################################################
-#Get list of health outcomes names
-data_multi_omics=colnames(data_multi_omics)[c(8:13,15,17)]
-
-###############################################################################################
 #Initiate log file
-sink('training_testing_split_by_health_outcome.log')
+sink('training_testing_split_overall.log')
 
 ###############################################################################################
 #Set seed
@@ -36,6 +32,26 @@ set.seed(1)
 print('Seed set to 1')
 
 ###############################################################################################
+#Perform train test split
+
+#Split data into training and testing set (70/30 split for training/testing, since using cross validation won't need validation set)
+train_index=sample(seq_len(nrow(data_all)), size = floor(0.7*nrow(data_all)))
+
+data_train=data_all[train_index,]
+data_test=data_all[-train_index,]
+
+#Save
+saveRDS(data_train, 'overall_training_set.rds')
+
+saveRDS(data_test, 'overall_testing_set.rds')
+
+###############################################################################################
+#Get list of health outcomes names
+data_multi_omics=colnames(data_multi_omics)[c(8:13,15,17)]
+
+###############################################################################################
+#Check distributions of training/testing sets for each health outcome
+
 #Loop through health outcomes
 for (x in health_outcomes){
   
@@ -43,30 +59,18 @@ for (x in health_outcomes){
   
   print(x)
   
-  #Remove NAs from health outcome
-  data_temp=data_multi_omics[!is.na(data_multi_omics[[x]]),]
-  
+  #Health outcome distribution all data
   print('Overall Health Outcome Distribution:')
-  print(summary(data_temp[[x]]))
-
-  #Split data into training and testing set (70/30 split for training/testing, since using cross validation won't need validation set)
-  train_index=createDataPartition(data_temp[[x]], p = 0.7, list = FALSE)
+  print(summary(na.omit(data_all[[x]])))
   
-  data_train=data_temp[train_index,]
-  data_test=data_temp[-train_index,]
   
+  #Health outcome distribution by training and testing set
   print('Overall Training Set Info:')
-  print(summary(data_train[[x]]))
+  print(summary(na.omit(data_train[[x]])))
   
   print('Overall Testing Set Info:')
-  print(summary(data_test[[x]]))
+  print(summary(na.omit(data_test[[x]])))
   
-  
-  #Save
-  saveRDS(data_train, paste0('training_data/', x, '_training_set.rds'))
-  
-  saveRDS(data_test, paste0('testing_data/', x, '_testing_set.rds'))
-
 }
 
 sink()
