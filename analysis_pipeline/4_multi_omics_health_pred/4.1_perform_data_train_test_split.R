@@ -35,10 +35,10 @@ print('Seed set to 1')
 #Perform train test split
 
 #Split data into training and testing set (70/30 split for training/testing, since using cross validation won't need validation set)
-train_index=sample(seq_len(nrow(data_all)), size = floor(0.7*nrow(data_all)))
+train_index=sample(seq_len(nrow(data_multi_omics)), size = floor(0.7*nrow(data_multi_omics)))
 
-data_train=data_all[train_index,]
-data_test=data_all[-train_index,]
+data_train=data_multi_omics[train_index,]
+data_test=data_multi_omics[-train_index,]
 
 #Save
 saveRDS(data_train, 'overall_training_set.rds')
@@ -61,7 +61,7 @@ for (x in health_outcomes){
   
   #Health outcome distribution all data
   print('Overall Health Outcome Distribution:')
-  print(summary(na.omit(data_all[[x]])))
+  print(summary(na.omit(data_multi_omics[[x]])))
   
   
   #Health outcome distribution by training and testing set
